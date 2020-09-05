@@ -1,45 +1,55 @@
 package com.example.dialogactivity
-import android.content.DialogInterface
+
+import android.graphics.Color
 import android.os.Bundle
-import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {
-
-    val positiveButtonClick = { dialog: DialogInterface, which: Int ->
-        Toast.makeText(applicationContext,
-            android.R.string.yes, Toast.LENGTH_SHORT).show()
-    }
-    val negativeButtonClick = { dialog: DialogInterface, which: Int ->
-        Toast.makeText(applicationContext,
-            android.R.string.no, Toast.LENGTH_SHORT).show()
-    }
-    val neutralButtonClick = { dialog: DialogInterface, which: Int ->
-        Toast.makeText(applicationContext,
-            "Maybe", Toast.LENGTH_SHORT).show()
-    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-    }
 
-    fun basicAlert(view: View){
+        // Set a click listener for button widget
+        button.setOnClickListener{
+            // Initialize a new instance of
+            val builder = AlertDialog.Builder(this@MainActivity)
 
-        val builder = AlertDialog.Builder(this)
+            // Set the alert dialog title
+            builder.setTitle("App background color")
 
-        with(builder)
-        {
-            setTitle("Androidly Alert")
-            setMessage("We have a message")
-            setPositiveButton("OK", DialogInterface.OnClickListener(function = positiveButtonClick))
-            setNegativeButton(android.R.string.no, negativeButtonClick)
-            setNeutralButton("Maybe", neutralButtonClick)
-            show()
+            // Display a message on alert dialog
+            builder.setMessage("Are you want to set the app background color to RED?")
+
+            // Set a positive button and its click listener on alert dialog
+            builder.setPositiveButton("YES"){dialog, which ->
+                // Do something when user press the positive button
+                Toast.makeText(applicationContext,"Ok, we change the app background.",Toast.LENGTH_SHORT).show()
+
+                // Change the app background color
+                root_layout.setBackgroundColor(Color.MAGENTA)
+            }
+
+
+            // Display a negative button on alert dialog
+            builder.setNegativeButton("No"){dialog,which ->
+                Toast.makeText(applicationContext,"You are not agree.",Toast.LENGTH_SHORT).show()
+            }
+
+
+            // Display a neutral button on alert dialog
+            builder.setNeutralButton("Cancel"){_,_ ->
+                Toast.makeText(applicationContext,"You cancelled the dialog.",Toast.LENGTH_SHORT).show()
+            }
+
+            // Finally, make the alert dialog using builder
+            val dialog: AlertDialog = builder.create()
+
+            // Display the alert dialog on app interface
+            dialog.show()
         }
-
-
     }
 }
