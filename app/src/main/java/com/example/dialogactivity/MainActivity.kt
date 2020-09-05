@@ -1,44 +1,45 @@
 package com.example.dialogactivity
-
+import android.content.DialogInterface
 import android.os.Bundle
-import android.widget.Button
+import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 
-
 class MainActivity : AppCompatActivity() {
+
+    val positiveButtonClick = { dialog: DialogInterface, which: Int ->
+        Toast.makeText(applicationContext,
+            android.R.string.yes, Toast.LENGTH_SHORT).show()
+    }
+    val negativeButtonClick = { dialog: DialogInterface, which: Int ->
+        Toast.makeText(applicationContext,
+            android.R.string.no, Toast.LENGTH_SHORT).show()
+    }
+    val neutralButtonClick = { dialog: DialogInterface, which: Int ->
+        Toast.makeText(applicationContext,
+            "Maybe", Toast.LENGTH_SHORT).show()
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+    }
 
-        val button = findViewById<Button>(R.id.button)
+    fun basicAlert(view: View){
 
-        button.setOnClickListener {
-            val builder = AlertDialog.Builder(this)
-            //set title for alert dialog
-            builder.setTitle(R.string.dialogTitle)
-            //set message for alert dialog
-            builder.setMessage(R.string.dialogMessage)
-            builder.setIcon(android.R.drawable.ic_dialog_alert)
+        val builder = AlertDialog.Builder(this)
 
-            //performing positive action
-            builder.setPositiveButton("Yes"){dialogInterface, which ->
-                Toast.makeText(applicationContext,"clicked yes",Toast.LENGTH_LONG).show()
-            }
-            //performing cancel action
-            builder.setNeutralButton("Cancel"){dialogInterface , which ->
-                Toast.makeText(applicationContext,"clicked cancel\n operation cancel",Toast.LENGTH_LONG).show()
-            }
-            //performing negative action
-            builder.setNegativeButton("No"){dialogInterface, which ->
-                Toast.makeText(applicationContext,"clicked No",Toast.LENGTH_LONG).show()
-            }
-            // Create the AlertDialog
-            val alertDialog: AlertDialog = builder.create()
-            // Set other dialog properties
-            alertDialog.setCancelable(false)
-            alertDialog.show()
+        with(builder)
+        {
+            setTitle("Androidly Alert")
+            setMessage("We have a message")
+            setPositiveButton("OK", DialogInterface.OnClickListener(function = positiveButtonClick))
+            setNegativeButton(android.R.string.no, negativeButtonClick)
+            setNeutralButton("Maybe", neutralButtonClick)
+            show()
         }
+
+
     }
 }
